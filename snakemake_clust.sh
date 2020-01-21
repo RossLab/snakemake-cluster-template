@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 
+mkdir -p logs
+
 USE_LOCAL="yes" snakemake $@ -p --jobs 10 --cluster "qsub \
     -N {rule} \
     -pe smp64 \
     {threads} \
     -cwd \
+    -b y \
     -o \"logs/{rule}.{wildcards}.out\" \
     -e \"logs/{rule}.{wildcards}.err\""
 
