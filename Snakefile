@@ -7,7 +7,7 @@ if cluster_script == None :
 else :
 	cluster_script = "scripts/use_local.sh "
 
-localrules: all, help, get_results
+localrules: all, help
 
 ### rules for calling
 ## all
@@ -27,6 +27,6 @@ rule get_data :
 
 rule get_results :
 	threads : 1
-	input : "data/hummingbird.txt", "data/mealybug.txt"
+	input : "data/hummingbird.txt", "data/mealybug.txt", "data/kangaroo.txt"
 	output : "data/final_result.txt"
-	shell : "wc -l {input} 1> {output}"
+	shell : cluster_script + "scripts/compute_results.sh {input} {output}"

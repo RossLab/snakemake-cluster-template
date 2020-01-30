@@ -35,10 +35,11 @@ for arg in "$@"; do
     then
         RELATIVE_PATH=$(dirname "$arg")
         mkdir -p $LOCAL_DIR/$RELATIVE_PATH
-        # TODO rsync it!
-        cp -r $arg $LOCAL_DIR/$RELATIVE_PATH
+        rsync -a $arg $LOCAL_DIR/$RELATIVE_PATH
     fi
 done
+
+ls -l $LOCAL_DIR*
 
 ###########################
 # PREPARE FOR OUTPUT FILE #
@@ -60,19 +61,29 @@ shift 1;
 ###########
 
 cd $LOCAL_DIR
+
+pwd
+ls -l *
+
 $SCRIPT $@
 
 ###############################
 # MOVE RESULTS TO WORKING_DIR #
 ###############################
 
-# TODO rsync it!
-# TODO rsync it!
 if [ -d $OUTPUT ]; then
-    mv $OUTPUT $WORKING_DIR/$OUTPUT
+    # The output put not contain the 
+    rsync -a --remove-source-files $OUTPUT $WORKING_DIR/$RELATIVE_PATH
 else
-    mv $OUTPUT* $WORKING_DIR/$RELATIVE_PATH
+    rsync --remove-source-files $OUTPUT* $WORKING_DIR/$RELATIVE_PATH
 fi
+
+echo $OUTPUT
+echo $WORKING_DIR
+ll $WORKING_DIR/$RELATIVE_PATH
+
+# test if the copied file exists
+# if yes, delete it the local copy
 
 ############
 # CLEANING #
@@ -87,5 +98,7 @@ for arg in "$@"; do
         rm -r $arg
     fi
 done
+
 # remove all empty direcories
-find ./* -depth -type d -exec rmdir {} \;
+find . -type d -empty -delete
+rmdir "$LOCAL_DIR"
