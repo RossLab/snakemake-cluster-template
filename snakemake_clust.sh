@@ -2,7 +2,7 @@
 
 mkdir -p logs
 
-USE_LOCAL="yes" snakemake $@ -p --jobs 10 --cluster "qsub \
+snakemake $@ -p --jobs 10 --shadow-prefix /scratch/$USER --cluster "qsub \
     -N {rule} \
     -pe smp64 \
     {threads} \

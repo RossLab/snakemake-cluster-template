@@ -1,12 +1,5 @@
 # Space for preprocessing
 
-### if environmental variable USE_LOCAL contains anything, it will compute on /scratch/local
-cluster_script = os.environ.get("USE_LOCAL")
-if cluster_script == None :
-	cluster_script = ""
-else :
-	cluster_script = "scripts/use_local.sh "
-
 localrules: all, help, get_results
 
 ### rules for calling
@@ -22,8 +15,9 @@ rule help :
 
 rule get_data :
 	threads : 1
+	shadow: "shallow"
 	output : "data/{sp}.txt"
-	shell : cluster_script + "scripts/get_data.sh {wildcards.sp} {output}"
+	shell : "scripts/get_data.sh {wildcards.sp} > {output}"
 
 rule get_results :
 	threads : 1
