@@ -23,7 +23,7 @@ rule help :
 rule get_data :
 	threads : 1
 	output : "data/{sp}.txt"
-	shell : cluster_script + "scripts/get_data.sh {wildcards.sp} {output}"
+	shell : "scripts/get_data.sh {wildcards.sp} > {output}"
 
 rule get_results :
 	threads : 1
